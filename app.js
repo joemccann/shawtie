@@ -288,16 +288,11 @@ app.get('/api/create', function(req,res){
 	});
 });
 
-
-console.log(validate.url('http://www.google.com/finance'))
-
 // To generate a shortened url
 app.post('/api/create', function(req, res){
 	var apikey = req.body.apikey;
 	var longurl = req.body.longurl;
 	var jsonResponse = {};
-	
-	console.log(longurl)
 	
 	// check for api key
 	if( !(apikey in apikeys) )
