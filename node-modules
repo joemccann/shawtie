@@ -6,3 +6,5 @@ npm install request
 git clone http://github.com/brainfucker/hashlib.git
 cd hashlib
 make && make install
+cd ..
+rm -rf ./hashlib
