@@ -68,6 +68,7 @@ CHMOD 777 app.js
 
 TODO
 ----------------------
+change API Key in this document to 'foo@bar.com' api key
 npm installation support
 CouchDB backup
 Admin GUI

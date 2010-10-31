@@ -1,0 +1,177 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td
+{
+	border: 0;
+	font-family: inherit;
+	font-size: 100%;
+	font-style: inherit;
+	font-weight: inherit;
+	margin: 0;
+	outline: 0;
+	padding: 0;
+	vertical-align: baseline;
+}
+:focus
+{
+	outline: 0;
+}
+body
+{
+	line-height: 1;
+}
+ol, ul
+{
+	list-style: none;
+}
+table
+{
+	border-collapse: separate;
+	border-spacing: 0;
+}
+caption, th, td
+{
+	font-weight: normal;
+	text-align: left;
+}
+blockquote:before, blockquote:after,
+q:before, q:after
+{
+	content: "";
+}
+blockquote, q
+{
+	quotes: "" "";
+}
+body
+{
+	background: #eeeeee; /* old browsers */
+	background: -moz-linear-gradient(top, #eeeeee 0%, #eeeeee 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#eeeeee)); /* webkit */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 ); /* ie */
+
+	font-family: "HelveticaNeue",Verdana, sans-serif;
+	font-size: 100%;
+}
+#wrapper
+{
+	margin: 0 auto;
+	width: 440px;
+}
+
+header{
+	margin-top:20px;
+}
+
+h1{
+	font-size:3.2em;
+	letter-spacing:-2px;
+	font-style:italic;
+}
+
+h2{
+	font-size:1.4em;
+	margin-bottom:10px;
+}
+
+#main{
+	padding-top:30px;
+}
+
+#invite
+{
+	background: #01939a;
+	border-radius: 5px;
+	khtml-border-radius: 5px;
+	moz-border-radius: 5px;
+	padding: 20px;
+	webkit-border-radius: 5px;
+	width: 400px;
+}
+#invite fieldset
+{
+	border: none;
+	margin-bottom: 10px;
+}
+
+#invite fieldset:first-of-type
+{
+	margin-top: 10px;
+}
+
+
+#invite fieldset:last-of-type
+{
+	margin-bottom: 0;
+}
+
+#invite ol li
+{
+	background: #b9cf6a;
+	background: rgba(255,255,255,.3);
+	border-color: #e3ebc3;
+	border-color: rgba(255,255,255,.6);
+	border-radius: 5px;
+	border-style: solid;
+	border-width: 2px;
+	khtml-border-radius: 5px;
+	line-height: 30px;
+	list-style: none;
+	margin-bottom: 2px;
+	moz-border-radius: 5px;
+	padding: 10px;
+	webkit-border-radius: 5px;
+}
+
+#invite label
+{
+	float: left;
+	font-size: 1.4em;
+	width: 110px;
+}
+
+#invite input[type='email']{
+	font-size:1.4em;
+	width:250px;
+}
+
+#invite fieldset fieldset label:hover
+{
+	cursor: pointer;
+}
+
+#invite input:not([type=submit]):focus,
+				#invite textarea:focus
+{
+	background: #eaeaea;
+}
+
+#invite button
+{
+	background: #34c6cd;
+	border: none;
+	border-radius: 20px;
+	color: #000;
+	display: block;
+	font: 1.8em;
+	khtml-border-radius: 20px;
+	letter-spacing: 1px;
+	margin: 20px auto 0;
+	moz-border-radius: 20px;
+	padding: 7px 25px;
+	text-shadow: 0 1px 1px #fff;
+	text-transform: uppercase;
+	webkit-border-radius: 20px;
+}
+#invite button:hover
+{
+	background: #111000;
+	color: #fff;
+	text-shadow: 0 1px 1px #000;
+	cursor: pointer;
+}

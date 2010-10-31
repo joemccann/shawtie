@@ -180,7 +180,44 @@ function init()
 }
 
 
+// Configure Express App
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+	app.set('view engine', 'ejs');
+  app.use(express.bodyDecoder());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(express.staticProvider(__dirname + '/public'));
+});
+
 // Express Routes
+
+// To request an API Key. 
+app.get('/s/1/invite', function(req, res){
+
+	// Now render the page.
+	res.render('index.ejs', {
+  	locals: {
+      title: "Shawtie wanna be a thug...",
+  	}
+});
+	
+});
+
+app.get('/s/1/invite*', function(req, res){
+
+	var apikey = req.query.email;
+	var longurl = req.query.longurl;
+	var jsonResponse = {};
+	
+	if( !(shortId in shortened) ) res.send(404);
+	else
+	{
+		res.redirect(shortened[shortId]);
+	}
+	
+});
+
 
 // To generate a shortened url
 app.get('/s/1/api', function(req, res){
@@ -202,6 +239,7 @@ app.get('/s/1/api', function(req, res){
 		var shortenedKey = doesValueExist(shortened, longurl);
 		if( shortenedKey !== "Nonexistent")
 		{
+			// this if is probably not needed..
 			if(shortenedKey === 'undefined')
 			{
 				jsonResponse.code = 404;
