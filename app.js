@@ -25,7 +25,8 @@ var apikeys = {
 
 // Some config shit...
 var hostprefix = 'http://127.0.0.1:3003/s/';
-var backupFilename = 'shawties.json';
+var backupShortenedUrlsFilename = 'shawties.json';
+var backupApiKeysFilename = 'apikeys.json';
 var lastBackupTime = '';
 
 // This will be our in-memory store for fast-retrieval of shortened URLs.
@@ -124,21 +125,21 @@ function generateShortenedUrl()
 * @param String
 * @return void
 */
-function addToInMemoryStore( longurl, shortId )
+function addToInMemoryStore( value, key, obj )
 {
-	shortened[shortId] = longurl;
+	obj[key] = value;
 }
 
 /*
-*	@desc Write the current in-memory object containing all the shortened urls.
+*	@desc Write the current in-memory object to a file.
 * @param Object
 * @param String
 * @return void
 */
-function backupShortenedUrls(inMemoryObj, filename)
+function backupInMemoryStore(inMemoryObj, filename)
 {
-	// Create the latest timestamp, update lastBackupTime and add to the inMemoryObj
-	inMemoryObj._timestamp = lastBackupTime = timestamp.ISODateString(new Date()); 
+	// Create the latest timestamp and add to the inMemoryObj
+	inMemoryObj._timestamp = timestamp.ISODateString(new Date()); 
 
 	fs.writeFile( __dirname + "/" + filename, JSON.stringify(inMemoryObj), function(err){
 		if(err) throw err;
@@ -174,7 +175,7 @@ function loadShortenedUrls(obj, filename, cb)
 */
 function init()
 {
-	loadShortenedUrls(shortened, backupFilename, function(){
+	loadShortenedUrls(shortened, backupShortenedUrlsFilename, function(){
 		console.log(inspect(shortened))
 	});
 }
@@ -192,155 +193,6 @@ app.configure(function(){
 
 // Express Routes
 
-// To request an API Key. 
-app.get('/s/1/invite', function(req, res){
-	
-//	console.log(inspect(req))
-	
-	console.log(req.query.email)
-	
-	if(typeof req.query.email === 'undefined')
-	{
-		// Now render the page.
-		res.render('index.ejs', {
-	  	locals: {
-	      title: "Shawtie wanna be a thug...",
-	  	}
-		});
-	}
-	else
-	{
-		var email = req.query.email,
-				newApiKey = '',
-				jsonResponse = {};
-
-		// Check to see if it is a valid email address.
-		if ( !(validate.email(email)) )
-		{
-			jsonResponse.message = "Invalid email address."
-			jsonResponse.code = 401;
-			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 401);
-		}
-		// Check to see if email address already exists.
-		else if (doesValueExist(apikeys, email) !== "Nonexistent")
-		{
-			jsonResponse.message = "API Key already exists."
-			jsonResponse.code = 401;
-			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 401);
-		}
-		else
-		{
-			// add a new one.
-			newApiKey = generateApiKey(email);
-			apikeys[newApiKey] = email;
-			jsonResponse.message = "Your api key has been created.";
-			jsonResponse.apikey = newApiKey;
-			jsonResponse.code = 200;
-			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
-		}
-	}
-
-});
-
-app.post('/s/1/invite', function(req, res){
-	
-	if(typeof req.body.email === 'undefined')
-	{
-		// Now render the page.
-		res.render('index.ejs', {
-	  	locals: {
-	      title: "Shawtie wanna be a thug...",
-	  	}
-		});
-	}
-	else
-	{
-		var email = req.body.email,
-				newApiKey = '',
-				jsonResponse = {};
-
-		// Check to see if it is a valid email address.
-		if ( !(validate.email(email)) )
-		{
-			jsonResponse.message = "Invalid email address."
-			jsonResponse.code = 401;
-			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 401);
-		}
-		// Check to see if email address already exists.
-		else if (doesValueExist(apikeys, email) !== "Nonexistent")
-		{
-			jsonResponse.message = "API Key already exists."
-			jsonResponse.code = 401;
-			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 401);
-		}
-		else
-		{
-			// add a new one.
-			newApiKey = generateApiKey(email);
-			apikeys[newApiKey] = email;
-			jsonResponse.message = "Your api key has been created.";
-			jsonResponse.apikey = newApiKey;
-			jsonResponse.code = 200;
-			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
-		}
-	}
-
-});
-
-
-
-// To generate a shortened url
-app.get('/s/1/api', function(req, res){
-	var apikey = req.query.apikey;
-	var longurl = req.query.longurl;
-	var jsonResponse = {};
-	
-	// check for api key
-	if( apikeys[apikey] === 'undefined')
-	{
-		jsonResponse.code = 401;
-		jsonResponse.message = "Apikey was not found."
-		res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 401);
-	}
-	else
-	{
-		// NOTE: 'shortened' is the object with all the shortened urls
-		// Since now the Api key is good, so now let's see if the longurl already exists.
-		var shortenedKey = doesValueExist(shortened, longurl);
-		if( shortenedKey !== "Nonexistent")
-		{
-			// this if is probably not needed..
-			if(shortenedKey === 'undefined')
-			{
-				jsonResponse.code = 404;
-				jsonResponse.message = "The longurl is undefined.  Something went wrong.";
-				jsonResponse.longurl = longurl;
-				res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 404);
-			}
-			jsonResponse.code = 201;
-			jsonResponse.message = "Long URL "+ longurl +" already exists.";
-			jsonResponse.shortenedUrl = shortened[shortenedKey];
-			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 201);
-		}
-		else
-		{
-			jsonResponse.code = 201;
-			jsonResponse.message = "Long URL added to in memory store."
-			jsonResponse.shortendUrl = generateShortenedUrl();
-			jsonResponse.longurl = longurl;
-
-			// Update our in-memory object.
-			addToInMemoryStore( longurl, generateShortId() );
-
-			// Write the latest to a file for safe backup.
-			backupShortenedUrls(shortened, backupFilename);
-
-			res.send( JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 201);
-		}
-	}
-});
-
-
 // To redirect a shortened url to a longurl.
 app.get('/s/*', function(req, res){
 
@@ -353,6 +205,109 @@ app.get('/s/*', function(req, res){
 	}
 	
 });
+
+// To request an API Key. 
+app.get('/api/invite', function(req, res){
+		// Now render the page.
+		res.render('index.ejs', {
+	  	locals: {
+	      title: "Shawtie wanna be a thug...",
+	  	}
+		});
+});
+
+app.post('/api/requestkey', function(req, res){
+	
+		var email = req.body.email,
+				newApiKey = '',
+				jsonResponse = {};
+				
+		// Check to see if it is a valid email address.
+		if ( !(validate.email(email)) )
+		{
+			jsonResponse.message = "Invalid email address."
+			jsonResponse.code = 200;
+			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
+		}
+		// Check to see if email address already exists.
+		else if (doesValueExist(apikeys, email) !== "Nonexistent")
+		{
+			jsonResponse.message = "API Key already exists."
+			jsonResponse.code = 401;
+			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
+		}
+		else
+		{
+			// add a new one.
+			newApiKey = generateApiKey(email);
+			apikeys[newApiKey] = email;
+			jsonResponse.message = "Your api key has been created.";
+			jsonResponse.apikey = newApiKey;
+			jsonResponse.code = 201;
+			
+			// Update our in-memory object.
+			addToInMemoryStore( email, newApiKey, apikeys );
+
+			// Write the latest to a file for safe backup.
+			backupInMemoryStore(apikeys, backupApiKeysFilename);
+			
+			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 201);
+		}
+
+});
+
+// To generate a shortened url
+app.get('/api/create', function(req, res){
+	var apikey = req.query.apikey;
+	var longurl = req.query.longurl;
+	var jsonResponse = {};
+	
+	// check for api key
+	if( !(apikey in apikeys) )
+	{
+		jsonResponse.code = 200;
+		jsonResponse.message = "Apikey was not found."
+		res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
+	}
+	else
+	{
+		// NOTE: 'shortened' is the object with all the shortened urls
+		// Since now the Api key is good, so now let's see if the longurl already exists.
+		var shortenedKey = doesValueExist(shortened, longurl);
+		if( shortenedKey !== "Nonexistent")
+		{
+			// this if is probably not needed..
+			if(shortenedKey === 'undefined')
+			{
+				jsonResponse.code = 200;
+				jsonResponse.message = "The longurl is undefined.  Something went wrong.";
+				jsonResponse.longurl = longurl;
+				res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
+			}
+			jsonResponse.code = 200;
+			jsonResponse.message = "Long URL "+ longurl +" already exists.";
+			jsonResponse.shortenedUrl = shortened[shortenedKey];
+			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
+		}
+		else
+		{
+			jsonResponse.code = 201;
+			jsonResponse.message = "Long URL added to in memory store."
+			jsonResponse.shortendUrl = generateShortenedUrl();
+			jsonResponse.longurl = longurl;
+
+			// Update our in-memory object.
+			addToInMemoryStore( longurl, generateShortId(), shortened );
+
+			// Write the latest to a file for safe backup.
+			backupInMemoryStore(shortened, backupShortenedUrlsFilename);
+
+			res.send( JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 201);
+		}
+	}
+});
+
+
 
 // Only listen on $ node app.js
 

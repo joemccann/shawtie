@@ -31,7 +31,7 @@ and you'll be redirected to [http://subprint.com](http://subprint.com).
 If you want to add a new short url, open up another terminal and in the same directory type
 
 <pre>
-node test.js http://somenewurl.com/long/url.html
+node ./tests/test.js http://somenewurl.com/long/url.html
 </pre>
 
 Returns the json object response (just sample code here, your shortenedUrl may be different):
