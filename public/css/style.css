@@ -79,6 +79,14 @@ h2{
 	margin-bottom:10px;
 }
 
+.show{
+	display:block;
+}
+
+.hide{
+	display:none;
+}
+
 #main{
 	padding-top:30px;
 }
@@ -135,10 +143,15 @@ h2{
 	width: 110px;
 }
 
-#invite input[type='email']{
+#invite input[type='email'], input[type='text']{
 	font-size:1.4em;
 	width:250px;
 }
+
+input[type='text']{
+	font-size:1.1em;
+}
+
 
 #invite fieldset fieldset label:hover
 {

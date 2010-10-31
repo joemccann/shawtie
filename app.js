@@ -3,7 +3,7 @@
  */
 
 var express = require('express'),
-		base64 = require( __dirname + '/utils/base64'),
+		hash = require('hashlib'),
 		validate = require( __dirname + '/utils/validate'),
 		request = require('request'),
 		fs = require('fs'),
@@ -20,7 +20,7 @@ var errorMessages = {
 
 // Allowed API Keys.
 var apikeys = {
-"am9zZXBoLmlzYWFjQGdtYWlsLmNvbQ==": "joseph.isaac@gmail.com"	
+"823776525776c8f23a87176c59d25759da7a52c4": "foo@bar.com"	
 }
 
 // Some config shit...
@@ -32,14 +32,14 @@ var lastBackupTime = '';
 var shortened = {};
 
 /*
-*	@desc Generate an API Key by base64-encoding an email address.
+*	@desc Generate an API Key by sha1-encoding an email address.
 * @param String
 * @return String
 */
 function generateApiKey(email)
 {
-	if( !validate.email(email) ) throw new Error(errorMessages.invalidEmail + "-> " + email);
-	else return base64.encode(email);
+	if( !validate.email(email) ) return errorMessages.invalidEmail + "-> " + email;
+	else return hash.sha1(email);
 }
 
 /*
@@ -194,29 +194,99 @@ app.configure(function(){
 
 // To request an API Key. 
 app.get('/s/1/invite', function(req, res){
-
-	// Now render the page.
-	res.render('index.ejs', {
-  	locals: {
-      title: "Shawtie wanna be a thug...",
-  	}
-});
 	
-});
-
-app.get('/s/1/invite*', function(req, res){
-
-	var apikey = req.query.email;
-	var longurl = req.query.longurl;
-	var jsonResponse = {};
+//	console.log(inspect(req))
 	
-	if( !(shortId in shortened) ) res.send(404);
+	console.log(req.query.email)
+	
+	if(typeof req.query.email === 'undefined')
+	{
+		// Now render the page.
+		res.render('index.ejs', {
+	  	locals: {
+	      title: "Shawtie wanna be a thug...",
+	  	}
+		});
+	}
 	else
 	{
-		res.redirect(shortened[shortId]);
+		var email = req.query.email,
+				newApiKey = '',
+				jsonResponse = {};
+
+		// Check to see if it is a valid email address.
+		if ( !(validate.email(email)) )
+		{
+			jsonResponse.message = "Invalid email address."
+			jsonResponse.code = 401;
+			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 401);
+		}
+		// Check to see if email address already exists.
+		else if (doesValueExist(apikeys, email) !== "Nonexistent")
+		{
+			jsonResponse.message = "API Key already exists."
+			jsonResponse.code = 401;
+			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 401);
+		}
+		else
+		{
+			// add a new one.
+			newApiKey = generateApiKey(email);
+			apikeys[newApiKey] = email;
+			jsonResponse.message = "Your api key has been created.";
+			jsonResponse.apikey = newApiKey;
+			jsonResponse.code = 200;
+			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
+		}
 	}
-	
+
 });
+
+app.post('/s/1/invite', function(req, res){
+	
+	if(typeof req.body.email === 'undefined')
+	{
+		// Now render the page.
+		res.render('index.ejs', {
+	  	locals: {
+	      title: "Shawtie wanna be a thug...",
+	  	}
+		});
+	}
+	else
+	{
+		var email = req.body.email,
+				newApiKey = '',
+				jsonResponse = {};
+
+		// Check to see if it is a valid email address.
+		if ( !(validate.email(email)) )
+		{
+			jsonResponse.message = "Invalid email address."
+			jsonResponse.code = 401;
+			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 401);
+		}
+		// Check to see if email address already exists.
+		else if (doesValueExist(apikeys, email) !== "Nonexistent")
+		{
+			jsonResponse.message = "API Key already exists."
+			jsonResponse.code = 401;
+			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 401);
+		}
+		else
+		{
+			// add a new one.
+			newApiKey = generateApiKey(email);
+			apikeys[newApiKey] = email;
+			jsonResponse.message = "Your api key has been created.";
+			jsonResponse.apikey = newApiKey;
+			jsonResponse.code = 200;
+			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
+		}
+	}
+
+});
+
 
 
 // To generate a shortened url

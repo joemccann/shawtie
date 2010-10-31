@@ -3,3 +3,6 @@
 echo "\nGrabbing dependencies...\n"
 npm install express
 npm install request
+git clone http://github.com/brainfucker/hashlib.git
+cd hashlib
+make && make install

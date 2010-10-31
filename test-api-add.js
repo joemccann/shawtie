@@ -3,9 +3,9 @@ var request = require('request'),
 
 var inspect = require('sys').inspect;
 
-var cliUrl = strings.urlencode( process.ARGV[2] );
-var url = 'http://127.0.0.1:3003/s/1/api?'
-var params = 'apikey=am9zZXBoLmlzYWFjQGdtYWlsLmNvbQ%3D%3D&longurl='+cliUrl;
+//var cliUrl = strings.urlencode( process.ARGV[2] );
+var url = 'http://127.0.0.1:3003/s/1/invite?'
+var params = 'email=fo@fo.com';
 var h = {'content-type': 'application/x-www-form-urlencoded'};
 
 console.log(url+params)
