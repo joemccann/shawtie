@@ -202,8 +202,15 @@ app.get('/s/1/api', function(req, res){
 		var shortenedKey = doesValueExist(shortened, longurl);
 		if( shortenedKey !== "Nonexistent")
 		{
+			if(shortenedKey === 'undefined')
+			{
+				jsonResponse.code = 404;
+				jsonResponse.message = "The longurl is undefined.  Something went wrong.";
+				jsonResponse.longurl = longurl;
+				res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 404);
+			}
 			jsonResponse.code = 201;
-			jsonResponse.message = "Long URL already exists.";
+			jsonResponse.message = "Long URL "+ longurl +" already exists.";
 			jsonResponse.shortenedUrl = shortened[shortenedKey];
 			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 201);
 		}
