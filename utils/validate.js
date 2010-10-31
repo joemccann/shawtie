@@ -5,4 +5,11 @@ function validateEmail(email)
  return email.match(re);
 }
 
+function validateUrl(url)
+{
+	var re = /\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|]/;
+	return url.match(re);
+}
+
 exports.email = validateEmail;
+exports.url = validateUrl;

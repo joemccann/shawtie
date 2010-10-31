@@ -304,6 +304,12 @@ app.post('/api/create', function(req, res){
 		jsonResponse.message = "Apikey was not found."
 		res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
 	}
+	else if( !( validate.url(longurl) ) )
+	{
+		jsonResponse.code = 200;
+		jsonResponse.message = "Not a valid URL."
+		res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);		
+	}
 	else
 	{
 		// NOTE: 'shortened' is the object with all the shortened urls
