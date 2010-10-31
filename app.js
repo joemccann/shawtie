@@ -289,13 +289,15 @@ app.get('/api/create', function(req,res){
 });
 
 
+console.log(validate.url('http://www.google.com/finance'))
+
 // To generate a shortened url
 app.post('/api/create', function(req, res){
 	var apikey = req.body.apikey;
 	var longurl = req.body.longurl;
 	var jsonResponse = {};
 	
-	console.log(apikey)
+	console.log(longurl)
 	
 	// check for api key
 	if( !(apikey in apikeys) )
@@ -304,12 +306,13 @@ app.post('/api/create', function(req, res){
 		jsonResponse.message = "Apikey was not found."
 		res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
 	}
-	else if( !( validate.url(longurl) ) )
-	{
-		jsonResponse.code = 200;
-		jsonResponse.message = "Not a valid URL."
-		res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);		
-	}
+	// TODO: Fix this.
+	// else if( !( validate.url(longurl) ) )
+	// {
+	// 	jsonResponse.code = 200;
+	// 	jsonResponse.message = "Not a valid URL."
+	// 	res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);		
+	// }
 	else
 	{
 		// NOTE: 'shortened' is the object with all the shortened urls
