@@ -65,6 +65,17 @@ If you use the <code>curl</code> route, you'll need to <code>CHMOD</code> on the
 CHMOD 777 app.js
 </pre>
 
+Not a fan of command line interfaces?  No worries, navigate to here:
+
+<pre>http://127.0.0.1:3003/api/invite</pre>
+
+To get your own API key.
+
+Then, head over to:
+
+<pre>http://127.0.0.1:3003/api/create</pre>
+
+And give it a shot there.
 
 TODO
 ----------------------
