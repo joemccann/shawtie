@@ -10,7 +10,11 @@ node app.js
 
 That will spin it up.
 
-Then, in your browser, type "http://127.0.0.1:3003/s/A" and you'll be redirected to subprint.com.
+Then, in your browser, type:
+
+http://127.0.0.1:3003/s/A
+
+and you'll be redirected to subprint.com.
 
 If you want to add a new short url, open up another terminal and in the same directory type
 
