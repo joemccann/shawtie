@@ -1,0 +1,50 @@
+<div id="wrapper">
+<header>
+  <h1>Shawtie</h1>
+</header>
+
+<div id="main">
+
+  <h2>Create a Shawtie URL</h2>
+  <form id="create" method="post" enctype="application/x-www-form-urlencoded" action="/api/create">
+  	<fieldset class="show">
+  		<ol>
+  			<li>
+  				<label for="apikey">API Key</label>
+  				<input id="apikey" name="apikey" type="text" required>
+  			</li>
+  			<li>
+  				<label for="longurl">URL</label>
+  				<input id="longurl" name="longurl" type="url" placeholder="http://joenice.net" required>
+  			</li>
+  		</ol>
+  	</fieldset>
+  	<fieldset class="show">
+  		<button id="getShawtie">Get a Shawtie URL</button>
+  	</fieldset>
+  	<fieldset id="response" class="hide">
+		<ol>
+			<li>
+				<label for="shawtie">Shawtie URL</label>
+				<input id="shawtie" type="text" name="shawtie" value="" />
+			</li>
+		</ol>
+  	</fieldset>
+  	
+  	<fieldset id="error" class="hide">
+		<ol>
+			<li>
+				<label for="error-message" class="error">Error</label>
+				<input id="error-message" name="error" type="text" value="" disabled="radical" />
+			</li>
+		</ol>
+  	</fieldset>
+  	
+  	
+  </form>
+
+</div> <!-- End main -->
+
+
+<footer> </footer>
+</div> <!-- End wrapper -->

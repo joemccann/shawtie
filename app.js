@@ -18,19 +18,18 @@ var errorMessages = {
 	invalidEmail: 'Invalid email address'
 }
 
-// Allowed API Keys.
-var apikeys = {
-"823776525776c8f23a87176c59d25759da7a52c4": "foo@bar.com"	
-}
-
 // Some config shit...
 var hostprefix = 'http://127.0.0.1:3003/s/';
 var backupShortenedUrlsFilename = 'shawties.json';
 var backupApiKeysFilename = 'apikeys.json';
 var lastBackupTime = '';
+var lastApiKeysBackupTime = '';
 
 // This will be our in-memory store for fast-retrieval of shortened URLs.
 var shortened = {};
+
+// Allowed API Keys.
+var apikeys = {};
 
 /*
 *	@desc Generate an API Key by sha1-encoding an email address.
@@ -151,12 +150,11 @@ function backupInMemoryStore(inMemoryObj, filename)
 
 /*
 *	@desc Read the backup file and place the contents in the current in-memory object.
-* @param Object
 * @param String
 * @param Function
 * @return void
 */
-function loadShortenedUrls(obj, filename, cb)
+function loadShortenedUrls(filename, cb)
 {
 	fs.readFile( __dirname + "/" + filename, 'utf8', function(err, data){
 		if(err) throw err;
@@ -170,14 +168,38 @@ function loadShortenedUrls(obj, filename, cb)
 }
 
 /*
+*	@desc Read the backup file and place the contents in the current in-memory object.
+* @param String
+* @param Function
+* @return void
+*/
+function loadApiKeys(filename, cb)
+{
+	fs.readFile( __dirname + "/" + filename, 'utf8', function(err, data){
+		if(err) throw err;
+		apikeys = JSON.parse(data);
+		lastApiKeysBackupTime = apikeys['_timestamp'];
+		delete apikeys['_timestamp'];
+		cb && typeof cb === 'function' && cb();
+	});
+}
+
+
+/*
 *	@desc Initialize at startup.
 * @return void
 */
 function init()
 {
-	loadShortenedUrls(shortened, backupShortenedUrlsFilename, function(){
+	loadShortenedUrls(backupShortenedUrlsFilename, function(){
 		console.log(inspect(shortened))
 	});
+
+	loadApiKeys(backupApiKeysFilename, function(){
+		console.log(inspect(apikeys))
+	});
+
+
 }
 
 
@@ -209,7 +231,7 @@ app.get('/s/*', function(req, res){
 // To request an API Key. 
 app.get('/api/invite', function(req, res){
 		// Now render the page.
-		res.render('index.ejs', {
+		res.render('invite.ejs', {
 	  	locals: {
 	      title: "Shawtie wanna be a thug...",
 	  	}
@@ -233,7 +255,7 @@ app.post('/api/requestkey', function(req, res){
 		else if (doesValueExist(apikeys, email) !== "Nonexistent")
 		{
 			jsonResponse.message = "API Key already exists."
-			jsonResponse.code = 401;
+			jsonResponse.code = 200;
 			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
 		}
 		else
@@ -256,11 +278,24 @@ app.post('/api/requestkey', function(req, res){
 
 });
 
+// GUI interface for creating a link.
+app.get('/api/create', function(req,res){
+
+	res.render('shorten.ejs', {
+  	locals: {
+      title: "Shawtie wanna be a thug...",
+  	}
+	});
+});
+
+
 // To generate a shortened url
-app.get('/api/create', function(req, res){
-	var apikey = req.query.apikey;
-	var longurl = req.query.longurl;
+app.post('/api/create', function(req, res){
+	var apikey = req.body.apikey;
+	var longurl = req.body.longurl;
 	var jsonResponse = {};
+	
+	console.log(apikey)
 	
 	// check for api key
 	if( !(apikey in apikeys) )
@@ -285,7 +320,7 @@ app.get('/api/create', function(req, res){
 				res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
 			}
 			jsonResponse.code = 200;
-			jsonResponse.message = "Long URL "+ longurl +" already exists.";
+			jsonResponse.message = "Long URL, "+ longurl +", already exists.";
 			jsonResponse.shortenedUrl = shortened[shortenedKey];
 			res.send(JSON.stringify(jsonResponse), { 'Content-Type': 'application/json' }, 200);
 		}
@@ -293,7 +328,7 @@ app.get('/api/create', function(req, res){
 		{
 			jsonResponse.code = 201;
 			jsonResponse.message = "Long URL added to in memory store."
-			jsonResponse.shortendUrl = generateShortenedUrl();
+			jsonResponse.shortenedUrl = generateShortenedUrl();
 			jsonResponse.longurl = longurl;
 
 			// Update our in-memory object.

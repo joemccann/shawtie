@@ -46,7 +46,7 @@ Returns the json object response (just sample code here, your shortenedUrl may b
 
 or use curl
 <pre>
-curl -i -H "Accept: application/json" -X GET -d "longurl=http://somenewurl.com/long/another-url.html" http://127.0.0.1:3003/s/1/api?apikey=am9zZXBoLmlzYWFjQGdtYWlsLmNvbQ%3D%3D
+curl -i -H "Accept: application/json" -X POST -d "longurl=http://somenewurl.com/long/another-url.html" http://127.0.0.1:3003/api/create?apikey=823776525776c8f23a87176c59d25759da7a52c4
 </pre>
 
 You should receive (or something relatively similar):

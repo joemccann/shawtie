@@ -87,11 +87,15 @@ h2{
 	display:none;
 }
 
+.error{
+	color:red;
+}
+
 #main{
 	padding-top:30px;
 }
 
-#invite
+form
 {
 	background: #01939a;
 	border-radius: 5px;
@@ -99,30 +103,28 @@ h2{
 	moz-border-radius: 5px;
 	padding: 20px;
 	webkit-border-radius: 5px;
-	width: 400px;
+	width: 440px;
 }
-#invite fieldset
+form fieldset
 {
 	border: none;
 	margin-bottom: 10px;
 }
 
-#invite fieldset:first-of-type
+form fieldset:first-of-type
 {
 	margin-top: 10px;
 }
 
 
-#invite fieldset:last-of-type
+form fieldset:last-of-type
 {
 	margin-bottom: 0;
 }
 
-#invite ol li
+form ol li
 {
-	background: #b9cf6a;
 	background: rgba(255,255,255,.3);
-	border-color: #e3ebc3;
 	border-color: rgba(255,255,255,.6);
 	border-radius: 5px;
 	border-style: solid;
@@ -130,20 +132,20 @@ h2{
 	khtml-border-radius: 5px;
 	line-height: 30px;
 	list-style: none;
-	margin-bottom: 2px;
+	margin-bottom: 20px;
 	moz-border-radius: 5px;
 	padding: 10px;
 	webkit-border-radius: 5px;
 }
 
-#invite label
+form label
 {
 	float: left;
 	font-size: 1.4em;
-	width: 110px;
+	width: 150px;
 }
 
-#invite input[type='email'], input[type='text']{
+form input[type='email'], input[type='text'], input[type='url']{
 	font-size:1.4em;
 	width:250px;
 }
@@ -153,18 +155,18 @@ input[type='text']{
 }
 
 
-#invite fieldset fieldset label:hover
+form fieldset fieldset label:hover
 {
 	cursor: pointer;
 }
 
-#invite input:not([type=submit]):focus,
-				#invite textarea:focus
+form input:not([type=submit]):focus,
+				form textarea:focus
 {
 	background: #eaeaea;
 }
 
-#invite button
+form button
 {
 	background: #34c6cd;
 	border: none;
@@ -181,7 +183,7 @@ input[type='text']{
 	text-transform: uppercase;
 	webkit-border-radius: 20px;
 }
-#invite button:hover
+form button:hover
 {
 	background: #111000;
 	color: #fff;
