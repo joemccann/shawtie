@@ -1,7 +1,7 @@
 Shawtie
 ===================
 
-_An in-memory URL-shortener written in 100% pure JavaScrip à la mode Node.js._
+_An in-memory URL-shortener written in 100% pure JavaScript à la mode Node.js._
 
 Installation/Usage
 <pre>
