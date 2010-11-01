@@ -51,7 +51,7 @@ blockquote, q
 body
 {
 	background: #eeeeee; /* old browsers */
-	background: -moz-linear-gradient(top, #eeeeee 0%, #eeeeee 100%); /* firefox */
+	background: --moz-linear-gradient(top, #eeeeee 0%, #eeeeee 100%); /* firefox */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#eeeeee)); /* webkit */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 ); /* ie */
 
@@ -100,7 +100,7 @@ form
 	background: #01939a;
 	border-radius: 5px;
 	khtml-border-radius: 5px;
-	moz-border-radius: 5px;
+	-moz-border-radius: 5px;
 	padding: 20px;
 	webkit-border-radius: 5px;
 	width: 440px;
@@ -111,13 +111,12 @@ form fieldset
 	margin-bottom: 10px;
 }
 
-form fieldset:first-of-type
+form fieldset:first-child
 {
 	margin-top: 10px;
 }
 
-
-form fieldset:last-of-type
+form fieldset:last-child
 {
 	margin-bottom: 0;
 }
@@ -133,7 +132,7 @@ form ol li
 	line-height: 30px;
 	list-style: none;
 	margin-bottom: 20px;
-	moz-border-radius: 5px;
+	-moz-border-radius: 5px;
 	padding: 10px;
 	webkit-border-radius: 5px;
 }
@@ -154,16 +153,9 @@ input[type='text']{
 	font-size:1.1em;
 }
 
-
-form fieldset fieldset label:hover
+form label:hover, form label:focus
 {
 	cursor: pointer;
-}
-
-form input:not([type=submit]):focus,
-				form textarea:focus
-{
-	background: #eaeaea;
 }
 
 form button
@@ -171,19 +163,19 @@ form button
 	background: #34c6cd;
 	border: none;
 	border-radius: 20px;
+	khtml-border-radius: 20px;
+	-moz-border-radius: 20px;
+	webkit-border-radius: 20px;
 	color: #000;
 	display: block;
 	font: 1.8em;
-	khtml-border-radius: 20px;
 	letter-spacing: 1px;
-	margin: 20px auto 0;
-	moz-border-radius: 20px;
 	padding: 7px 25px;
 	text-shadow: 0 1px 1px #fff;
 	text-transform: uppercase;
-	webkit-border-radius: 20px;
 }
-form button:hover
+
+form button:hover, form button:focus
 {
 	background: #111000;
 	color: #fff;

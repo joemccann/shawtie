@@ -1,0 +1,25 @@
+# OSX
+.DS_Store
+# Textmate project file.
+.tmproj
+
+# Windows
+Thumbs.db
+
+# Eclipse
+.cache
+.cache/*
+.settings
+.settings/*
+*.class
+bin
+
+# Archives / packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip

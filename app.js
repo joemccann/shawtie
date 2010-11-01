@@ -15,7 +15,8 @@ var inspect = require('sys').inspect;
 var app = module.exports = express.createServer();
 
 var errorMessages = {
-	invalidEmail: 'Invalid email address'
+	invalidEmail: 'Invalid email address',
+	invalidURL: 'Invalid URL'
 }
 
 // Some config shit...
@@ -184,7 +185,6 @@ function loadApiKeys(filename, cb)
 	});
 }
 
-
 /*
 *	@desc Initialize at startup.
 * @return void
@@ -198,8 +198,6 @@ function init()
 	loadApiKeys(backupApiKeysFilename, function(){
 		console.log(inspect(apikeys))
 	});
-
-
 }
 
 
@@ -228,7 +226,7 @@ app.get('/s/*', function(req, res){
 	
 });
 
-// To request an API Key. 
+// GUI for API Request 
 app.get('/api/invite', function(req, res){
 		// Now render the page.
 		res.render('invite.ejs', {
@@ -238,6 +236,7 @@ app.get('/api/invite', function(req, res){
 		});
 });
 
+// Handles POST data for an API Key request [API]
 app.post('/api/requestkey', function(req, res){
 	
 		var email = req.body.email,
@@ -288,7 +287,7 @@ app.get('/api/create', function(req,res){
 	});
 });
 
-// To generate a shortened url
+// To generate a shortened url  [API]
 app.post('/api/create', function(req, res){
 	var apikey = req.body.apikey;
 	var longurl = req.body.longurl;
@@ -345,7 +344,6 @@ app.post('/api/create', function(req, res){
 		}
 	}
 });
-
 
 
 // Only listen on $ node app.js
